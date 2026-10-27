@@ -93,9 +93,9 @@
   $("#heroLoc").textContent = "📍 " + D.location;
   $("#heroCv").setAttribute("href", C.resume);
   $("#cvBtn").setAttribute("href", C.resume);
-  $("#objective").textContent = D.about.objective;
-  $("#glance").innerHTML = D.about.glance.map(function (r) {
-    return "<div><dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd></div>";
+  $("#about-h").textContent = D.about.heading;
+  $("#aboutText").innerHTML = D.about.paragraphs.map(function (t, i, a) {
+    return "<p" + (i === a.length - 1 && a.length > 1 ? ' class="closing"' : "") + ">" + esc(t) + "</p>";
   }).join("");
   $("#footName").textContent = "© " + new Date().getFullYear() + " " + D.name;
 
@@ -224,39 +224,47 @@
       "</div><b>" + esc(s.title) + "</b><p>" + esc(s.text) + "</p></div></div>";
   }).join("");
 
-  /* ---------- skills (filter + search) ---------- */
-  var GROUPS = [
-    { id: "all", label: "All" },
-    { id: "hard", label: "Hard skills" },
-    { id: "soft", label: "Soft skills" },
-    { id: "language", label: "Languages" }
+  /* ---------- skills (three separate groups, filter + search) ---------- */
+  var SK = D.skills || {};
+  var SK_BLOCKS = [
+    { id: "technical", label: "Technical & software skills", list: SK.technical || [] },
+    { id: "competency", label: "Competency", list: SK.competency || [] },
+    { id: "languages", label: "Languages", list: SK.languages || [] }
   ];
-  var GROUP_LABEL = { hard: "Hard skill", soft: "Soft skill", language: "Language" };
   var skillGroup = "all", skillQuery = "";
-  $("#skillFilters").innerHTML = GROUPS.map(function (g, i) {
+  $("#skillFilters").innerHTML = [{ id: "all", label: "All" }].concat(SK_BLOCKS).map(function (g, i) {
     return '<button type="button" class="chip" data-g="' + g.id + '" aria-pressed="' + (i === 0) + '">' + esc(g.label) + "</button>";
   }).join("");
 
+  function skillCard(b, s, i) {
+    var lang = b.id === "languages";
+    var meter = "";
+    if (lang) {
+      meter = '<div class="meter" role="img" aria-label="' + esc(s.usage || "") + '">';
+      for (var k = 1; k <= 4; k++) meter += '<i class="' + (k <= (s.step || 0) ? "on" : "") + '"></i>';
+      meter += "</div>";
+    }
+    var use = s.usage ? (lang ? '<span class="lvl">' + esc(s.usage) + "</span>" : '<span class="badge use">' + esc(s.usage) + "</span>") : "";
+    return '<div class="sk" data-g="' + b.id + '" style="animation-delay:' + (reduceMotion ? 0 : Math.min(i, 12) * 40) + 'ms">' +
+      '<span class="nm">' + esc(s.name) + "</span>" +
+      (s.detail ? '<span class="dt">' + esc(s.detail) + "</span>" : "") + use + meter + "</div>";
+  }
   function renderSkills() {
     var q = skillQuery.trim().toLowerCase();
-    var list = D.skills.filter(function (s) {
-      if (skillGroup !== "all" && s.group !== skillGroup) return false;
-      if (!q) return true;
-      return (s.name + " " + (s.detail || "") + " " + (s.usage || "") + " " + GROUP_LABEL[s.group]).toLowerCase().indexOf(q) >= 0;
+    var total = 0, shown = 0, html = "";
+    SK_BLOCKS.forEach(function (b) {
+      total += b.list.length;
+      if (skillGroup !== "all" && skillGroup !== b.id) return;
+      var list = b.list.filter(function (s) {
+        return !q || (s.name + " " + (s.detail || "") + " " + (s.usage || "") + " " + b.label).toLowerCase().indexOf(q) >= 0;
+      });
+      if (!list.length) return;
+      shown += list.length;
+      html += '<div class="sk-block"><h3 class="sk-h">' + esc(b.label) + '<span class="n">' + list.length + "</span></h3>" +
+        '<div class="skill-grid">' + list.map(function (s, i) { return skillCard(b, s, i); }).join("") + "</div></div>";
     });
-    $("#skillGrid").innerHTML = list.length ? list.map(function (s, i) {
-      var meter = "";
-      if (s.group === "language") {
-        meter = '<div class="meter" role="img" aria-label="' + esc(s.usage) + '">';
-        for (var k = 1; k <= 4; k++) meter += '<i class="' + (k <= s.step ? "on" : "") + '"></i>';
-        meter += "</div>";
-      }
-      var use = s.usage ? (s.group === "language" ? '<span class="lvl">' + esc(s.usage) + "</span>" : '<span class="badge use">' + esc(s.usage) + "</span>") : "";
-      return '<div class="sk" data-g="' + s.group + '" style="animation-delay:' + (reduceMotion ? 0 : Math.min(i, 12) * 40) + 'ms">' +
-        '<span class="grp">' + GROUP_LABEL[s.group] + '</span><span class="nm">' + esc(s.name) + "</span>" +
-        (s.detail ? '<span class="dt">' + esc(s.detail) + "</span>" : "") + use + meter + "</div>";
-    }).join("") : '<p class="empty">No skills match “' + esc(skillQuery) + '”. Try another word.</p>';
-    $("#skillCount").textContent = "Showing " + list.length + " of " + D.skills.length + " skills";
+    $("#skillBlocks").innerHTML = html || '<p class="empty">No skills match “' + esc(skillQuery) + '”. Try another word.</p>';
+    $("#skillCount").textContent = "Showing " + shown + " of " + total + " skills";
   }
   $("#skillFilters").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-g]");
@@ -270,6 +278,104 @@
     renderSkills();
   });
   renderSkills();
+
+  /* ---------- product range: hover names + click-to-enlarge ---------- */
+  var PR = D.products || {};
+  var prItems = PR.items || [];
+  if (!prItems.length) {
+    $("#products").remove();
+    var prLink = $('#nav a[href="#products"]');
+    if (prLink && prLink.parentNode) prLink.parentNode.remove();
+  } else {
+    $("#prKicker").textContent = PR.kicker || "Product range";
+    $("#products-h").textContent = PR.heading || "The product I develop";
+    $("#prIntro").textContent = PR.intro || "";
+    var prCats = [];
+    prItems.forEach(function (p) { if (p.category && prCats.indexOf(p.category) < 0) prCats.push(p.category); });
+    var prCat = "All";
+    if (prCats.length > 1) {
+      $("#prFilters").innerHTML = ["All"].concat(prCats).map(function (c, i) {
+        return '<button type="button" data-c="' + esc(c) + '" aria-pressed="' + (i === 0) + '">' + esc(c) + "</button>";
+      }).join("");
+    } else {
+      $("#prFilters").remove();
+    }
+    $("#prGrid").innerHTML = prItems.map(function (p, i) {
+      return '<button type="button" class="pcard" data-i="' + i + '" data-c="' + esc(p.category || "") + '" aria-label="Enlarge: ' + esc(p.name) + '">' +
+        '<img src="' + esc(p.file) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"><span class="cap">' + esc(p.name) + "</span></button>";
+    }).join("");
+    /* A picture that cannot be found shows its name on a plain tile instead of a broken icon. */
+    $("#prGrid").addEventListener("error", function (e) {
+      if (e.target && e.target.tagName === "IMG") e.target.closest(".pcard").classList.add("broken");
+    }, true);
+
+    var prVisible = [];
+    function applyPr() {
+      prVisible = [];
+      $$("#prGrid .pcard").forEach(function (c) {
+        var ok = prCat === "All" || c.dataset.c === prCat;
+        c.hidden = !ok;
+        if (ok) prVisible.push(+c.dataset.i);
+      });
+      $("#prCount").textContent = prCat === "All" ? prItems.length + " styles" : prVisible.length + " of " + prItems.length + " styles · " + prCat;
+    }
+    if ($("#prFilters")) {
+      $("#prFilters").addEventListener("click", function (e) {
+        var b = e.target.closest("button[data-c]");
+        if (!b) return;
+        prCat = b.dataset.c;
+        $$("#prFilters button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        applyPr();
+      });
+    }
+    applyPr();
+
+    /* lightbox */
+    var lb = $("#lightbox"), lbImg = $("#lbImg"), lbCap = $("#lbCap"), lbPos = 0, lbFrom = null;
+    function showLb(pos) {
+      lbPos = (pos + prVisible.length) % prVisible.length;
+      var p = prItems[prVisible[lbPos]];
+      lbImg.setAttribute("src", p.file);
+      lbImg.setAttribute("alt", p.name);
+      lbCap.textContent = p.name + (prVisible.length > 1 ? "  ·  " + (lbPos + 1) + " / " + prVisible.length : "");
+    }
+    function openLb(i) {
+      lbFrom = document.activeElement;
+      var multi = prVisible.length > 1;
+      $("#lbPrev").hidden = !multi;
+      $("#lbNext").hidden = !multi;
+      showLb(Math.max(0, prVisible.indexOf(i)));
+      lb.hidden = false;
+      document.body.style.overflow = "hidden";
+      $("#lbClose").focus();
+    }
+    function closeLb() {
+      lb.hidden = true;
+      document.body.style.overflow = "";
+      lbImg.removeAttribute("src");
+      if (lbFrom && lbFrom.focus) lbFrom.focus();
+    }
+    $("#prGrid").addEventListener("click", function (e) {
+      var c = e.target.closest(".pcard");
+      if (c) openLb(+c.dataset.i);
+    });
+    $("#lbClose").addEventListener("click", closeLb);
+    $("#lbPrev").addEventListener("click", function () { showLb(lbPos - 1); });
+    $("#lbNext").addEventListener("click", function () { showLb(lbPos + 1); });
+    lb.addEventListener("click", function (e) { if (e.target === lb || e.target.classList.contains("lb-stage")) closeLb(); });
+    document.addEventListener("keydown", function (e) {
+      if (lb.hidden) return;
+      if (e.key === "Escape") { closeLb(); }
+      else if (e.key === "ArrowLeft" && prVisible.length > 1) { e.preventDefault(); showLb(lbPos - 1); }
+      else if (e.key === "ArrowRight" && prVisible.length > 1) { e.preventDefault(); showLb(lbPos + 1); }
+      else if (e.key === "Tab") {
+        var f = $$(".lb-btn", lb).filter(function (b) { return !b.hidden; });
+        var i = f.indexOf(document.activeElement);
+        e.preventDefault();
+        f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+      }
+    });
+  }
 
   /* ---------- research stepper ---------- */
   var R = D.research;

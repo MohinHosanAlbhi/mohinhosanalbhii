@@ -20,3 +20,12 @@ Open `data.js` on GitHub (pencil icon), edit the text, and commit. The page upda
 ## What's dynamic
 
 Light/dark theme (remembers your choice), scroll progress bar, active-section highlighting, animated counters, experience filter tabs, responsibility filters by focus area, live "current role" duration, training filter by year, skills explorer (filter by hard skill / soft skill / language, plus live search), a 4-step thesis story with keyboard support, click-to-reveal phone, copy-email, save-contact (vCard), and a message form that opens your email app.
+
+## Product range (add pictures)
+
+1. Put each picture inside `img/products/` (JPG, around 900 px wide keeps the page fast).
+2. Open `data.js`, find `products:` and add one line per picture inside `items: [ ... ]`:
+   `{ file: "img/products/henley-top.jpg", name: "Henley top" },`
+3. Optional: add `category: "Tops"` to a line and filter buttons appear automatically.
+
+While `items` is empty the whole Product range section (and its menu link) stays hidden. Hovering a picture shows the item name; clicking enlarges it, and the arrow keys move between pictures.

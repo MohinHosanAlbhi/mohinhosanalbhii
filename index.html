@@ -47,10 +47,11 @@
     <a class="brand" href="#top" aria-label="Back to top"><span class="logo" aria-hidden="true">MA</span><span id="brandName">Mohin Hosan Albhi</span></a>
     <nav class="main" id="nav" aria-label="Primary">
       <ul>
-        <li><a href="#about">About</a></li>
+        <li><a href="#about">Approach</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#education">Education</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#products">Products</a></li>
         <li><a href="#research">Research</a></li>
         <li><a href="#interests">Beyond work</a></li>
         <li><a href="#growth">Growth</a></li>
@@ -91,11 +92,8 @@
 
   <section id="about" data-nav="about" aria-labelledby="about-h">
     <div class="wrap">
-      <div class="sec-head reveal"><div class="kicker">About</div><h2 id="about-h">Career objective</h2></div>
-      <div class="about-grid">
-        <div class="card reveal"><p class="objective" id="objective"></p></div>
-        <div class="card reveal"><h3>At a glance</h3><dl class="glance" id="glance"></dl></div>
-      </div>
+      <div class="sec-head wide reveal"><h2 id="about-h"></h2></div>
+      <div class="card about-card reveal" id="aboutText"></div>
       <div class="stats" id="stats"></div>
     </div>
   </section>
@@ -141,19 +139,28 @@
 
   <section id="skills" data-nav="skills" aria-labelledby="skills-h">
     <div class="wrap">
-      <div class="sec-head reveal"><div class="kicker">Skills</div><h2 id="skills-h">Hard skills, soft skills &amp; languages</h2>
-        <p>Filter by type or search for a tool or skill.</p></div>
+      <div class="sec-head reveal"><div class="kicker">Skills</div><h2 id="skills-h">Tools, competencies &amp; languages</h2>
+        <p>Filter by area or search for a tool or skill.</p></div>
       <div class="toolbar reveal">
-        <div class="chips" id="skillFilters" role="group" aria-label="Filter skills by type"></div>
+        <div class="chips" id="skillFilters" role="group" aria-label="Filter skills by area"></div>
         <label class="search"><span class="sr">Search skills</span>
           <input id="skillSearch" type="search" placeholder="Search skills…" autocomplete="off"></label>
       </div>
       <p class="cnt" id="skillCount" aria-live="polite"></p>
-      <div class="skill-grid" id="skillGrid"></div>
+      <div id="skillBlocks"></div>
     </div>
   </section>
 
-  <section id="research" class="alt" data-nav="research" aria-labelledby="res-h">
+  <section id="products" class="alt" data-nav="products" aria-labelledby="products-h">
+    <div class="wrap">
+      <div class="sec-head reveal"><div class="kicker" id="prKicker"></div><h2 id="products-h"></h2><p id="prIntro"></p></div>
+      <div class="tabs reveal" id="prFilters" role="group" aria-label="Filter styles by category"></div>
+      <div class="pgrid" id="prGrid"></div>
+      <p class="cnt" id="prCount" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section id="research" data-nav="research" aria-labelledby="res-h">
     <div class="wrap">
       <div class="sec-head reveal"><div class="kicker" id="resKicker"></div><h2 id="res-h"></h2></div>
       <div class="card reveal thesis">
@@ -172,7 +179,7 @@
     </div>
   </section>
 
-  <section id="interests" data-nav="interests" aria-labelledby="int-h">
+  <section id="interests" class="alt" data-nav="interests" aria-labelledby="int-h">
     <div class="wrap">
       <div class="sec-head reveal"><div class="kicker" id="intKicker"></div><h2 id="int-h"></h2></div>
       <div class="int-grid">
@@ -182,14 +189,14 @@
     </div>
   </section>
 
-  <section id="growth" class="alt" data-nav="growth" aria-labelledby="grow-h">
+  <section id="growth" data-nav="growth" aria-labelledby="grow-h">
     <div class="wrap">
       <div class="sec-head reveal"><div class="kicker" id="growKicker"></div><h2 id="grow-h"></h2><p id="growText"></p></div>
       <div class="growth-grid" id="growGrid"></div>
     </div>
   </section>
 
-  <section id="contact" data-nav="contact" aria-labelledby="contact-h">
+  <section id="contact" class="alt" data-nav="contact" aria-labelledby="contact-h">
     <div class="wrap">
       <div class="sec-head reveal"><div class="kicker">Contact</div><h2 id="contact-h">Let’s connect</h2>
         <p>Open to conversations about merchandising, sourcing and retail operations.</p></div>
@@ -222,6 +229,13 @@
     <span>Dhaka, Bangladesh</span>
   </div>
 </footer>
+
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Product image viewer" hidden>
+  <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous image">‹</button>
+  <figure class="lb-stage"><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next image">›</button>
+</div>
 
 <button class="icon-btn" id="toTop" type="button" aria-label="Back to top">↑</button>
 <div id="toast" role="status" aria-live="polite"></div>
