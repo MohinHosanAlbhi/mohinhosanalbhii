@@ -1,6 +1,9 @@
 /* ------------------------------------------------------------------
    All portfolio content lives here. Edit this file to update the site;
    no need to touch index.html, style.css or app.js.
+
+   Tip: change only the words between the "quote marks". Keep every quote
+   mark, comma, { } and [ ] exactly where it is.
 ------------------------------------------------------------------- */
 window.PORTFOLIO = {
   name: "Md. Mohin Hosan Albhi",
@@ -8,7 +11,7 @@ window.PORTFOLIO = {
   role: "Marketing & Merchandising",
   roleDetail: "Assistant Merchandiser · Interstoff Apparels Ltd.",
   tagline:
-    "Apparel merchandising professional specializing in end-to-end order management, product development, sourcing, costing, and on-time shipment. Experienced in managing international buyer accounts, including Calvin Klein, Reitmans, and Karl Lagerfeld, with a focus on production efficiency, quality assurance, and timely delivery.",
+    "Apparel merchandising professional specialized in end-to-end order management, product development, sourcing, costing, and on-time shipment. Experienced in managing international buyer accounts, including Calvin Klein, Reitmans, and Karl Lagerfeld, with a focus on customer satisfaction, customer relationship, company's profit and on-time shipment.",
   focus: ["Order management", "Product development", "Sourcing", "Costing", "On-time shipment"],
   location: "Dhaka, Bangladesh",
 
@@ -20,25 +23,21 @@ window.PORTFOLIO = {
     resume: "Md_Mohin_Hosan_Albhi_CV.pdf"
   },
 
+  /* Section right after the hero. The last paragraph is shown as a highlighted closing line. */
   about: {
-    objective:
-      "Performance-focused Merchandiser managing Calvin Klein (CK), Reitmans, and Karl Lagerfeld accounts, contributing to annual business valued at over US$13 million. Experienced in end-to-end order management, production tracking, customer & supplier communications, and ensuring on-time shipment execution. With a strong eye for detail and a commitment to continuous improvement, I aim to further develop expertise in global apparel sourcing and retail operations, while driving value, efficiency, and sustainable growth within an organization.",
-    glance: [
-      ["Current role", "Assistant Merchandiser – Marketing & Merchandising"],
-      ["Company", "Interstoff Apparels Ltd."],
-      ["Buyers", "CK · Reitmans · Karl Lagerfeld"],
-      ["Degree", "B.Sc. in Textile Engineering, BUTEX (2019–2024)"],
-      ["Major", "Wet Process Engineering"],
-      ["Languages", "Bangla · English · Hindi"],
-      ["Based in", "Dhaka, Bangladesh"]
+    heading: "Every Order Has a Challenge. Every Challenge Has a Way Forward",
+    paragraphs: [
+      "I believe effective merchandising goes beyond coordination. It requires technical understanding, commercial awareness, proactive problem-solving, and the ability to make sound decisions under pressure.",
+      "With a factory-side understanding of textile manufacturing, I connect buyer expectations with production realities, anticipate potential risks, and work collaboratively to find practical solutions without losing sight of cost, quality, or delivery commitments.",
+      "My approach is simple: understand the challenge, think beyond the obvious, and turn complexity into workable solutions."
     ]
   },
 
   stats: [
     { value: 3, label: "Buyer accounts managed", note: "CK · Reitmans · Karl Lagerfeld" },
-    { value: 13, prefix: "US$", suffix: "M+", label: "Annual business contributed to" },
-    { value: 3.6, decimals: 2, suffix: " / 4.00", label: "CGPA, B.Sc. Textile Engineering" },
-    { value: 10000, prefix: "~", label: "Students tutored in online classes" }
+    { value: 20, suffix: "+", label: "Confirmed styles per month" },
+    { value: 350, suffix: "+", label: "Styles shipped to date" },
+    { value: 0, label: "Air shipments" }
   ],
 
   /* type: "work" or "teaching" */
@@ -135,8 +134,11 @@ window.PORTFOLIO = {
   ],
 
   training: [
-    { title: "Comprehensive Training", provider: "Epyllion Group", year: "2025" },
-    { title: "Textile Merchandising", provider: "Jobletic-BD / El Corte Inglés", year: "2024" },
+    { title: "Claude 101 workshop", provider: "Outskill", year: "2026" },
+    { title: "Session on CLO 3D & CLO-SET", provider: "CLO-BD", year: "2026" },
+    { title: "Training on Buyer PLM", provider: "Reitmans", year: "2026" },
+    { title: "Comprehensive MT Engagement Training", provider: "Epyllion Group", year: "2025" },
+    { title: "Comprehensive Training on Textile Merchandising", provider: "Jobletic-BD in association with El Corte Inglés", year: "2024" },
     { title: "Research Methodology", provider: "HELD, BUTEX", year: "2024" },
     { title: "Business Email Writing", provider: "HP LIFE", year: "2024" },
     { title: "Sustainable Chemical Management", provider: "GIZ Bangladesh", year: "2022" },
@@ -148,23 +150,43 @@ window.PORTFOLIO = {
     { title: "Full academic scholarship", level: "HSC level", text: "Full academic scholarship at HSC level." }
   ],
 
-  /* group: "hard" | "soft" | "language". "usage" shows as a highlighted badge. */
-  skills: [
-    { group: "hard", name: "ERP", detail: "Merchandising Module" },
-    { group: "hard", name: "Microsoft Excel", detail: "VLOOKUP, XLOOKUP, Pivot Tables, Dashboard Creation" },
-    { group: "hard", name: "Microsoft PowerPoint", detail: "Presentation Development" },
-    { group: "hard", name: "Microsoft Word", detail: "Professional Documentation" },
-    { group: "hard", name: "AI", detail: "Claude · ChatGPT", usage: "Professional working proficiency" },
-    { group: "hard", name: "CLO 3D" },
-    { group: "hard", name: "PLM · Buyer tracking systems", detail: "Production status, inspection booking and shipment", usage: "Daily use" },
-    { group: "soft", name: "Leadership" },
-    { group: "soft", name: "Communication" },
-    { group: "soft", name: "Presentation" },
-    { group: "soft", name: "Time Management" },
-    { group: "language", name: "Bangla", usage: "Native", step: 4 },
-    { group: "language", name: "English", usage: "Professional Working Proficiency", step: 3 },
-    { group: "language", name: "Hindi", usage: "Intermediate", step: 2 }
-  ],
+  /* Three separate groups. "usage" shows as a highlighted badge; "step" (1-4) fills the language bar. */
+  skills: {
+    technical: [
+      { name: "ERP", detail: "Merchandising Module" },
+      { name: "Microsoft Excel", detail: "VLOOKUP, XLOOKUP, Pivot Tables, Dashboard Creation" },
+      { name: "Microsoft PowerPoint", detail: "Presentation Development" },
+      { name: "Microsoft Word", detail: "Professional Documentation" },
+      { name: "AI", detail: "Claude · ChatGPT", usage: "Professional working proficiency" },
+      { name: "CLO 3D" },
+      { name: "PLM · Buyer tracking systems", detail: "Production status, inspection booking and shipment", usage: "Daily use" }
+    ],
+    competency: [
+      { name: "Leadership" },
+      { name: "Communication" },
+      { name: "Presentation" },
+      { name: "Time Management" }
+    ],
+    languages: [
+      { name: "Bangla", usage: "Native", step: 4 },
+      { name: "English", usage: "Professional Working Proficiency", step: 3 },
+      { name: "Hindi", usage: "Intermediate", step: 2 }
+    ]
+  },
+
+  /* ------------------------------------------------------------------
+     PRODUCT RANGE  (Reitmans styles)
+     Put each picture in the folder  img/products/  and add one line below:
+       { file: "img/products/henley-top.jpg", name: "Henley top" },
+     Optional: add  category: "Tops"  to a line and filter buttons appear.
+     While this list is empty the whole section stays hidden.
+  ------------------------------------------------------------------- */
+  products: {
+    kicker: "Product range",
+    heading: "The product I develop",
+    intro: "Styles developed for the Reitmans account. Hover over any image to see the item name, and click to enlarge.",
+    items: []
+  },
 
   research: {
     kicker: "Undergraduate thesis project",
